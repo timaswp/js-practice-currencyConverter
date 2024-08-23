@@ -58,9 +58,14 @@ document.addEventListener("DOMContentLoaded", () => {
   amountTwo.addEventListener("input", () => calculate(currencyTwo.value, currencyOne.value, 2));
 
   swap.addEventListener("click", () => {
-    const temp = currencyOne.value;
+    const tempCurrency = currencyOne.value,
+          tempAmount = amountOne.value;
+
     currencyOne.value = currencyTwo.value;
-    currencyTwo.value = temp;
+    currencyTwo.value = tempCurrency;
+
+    amountOne.value = amountTwo.value;
+    amountTwo.value = tempAmount;
 
     calculate(currencyOne.value, currencyTwo.value, 1);
   });
