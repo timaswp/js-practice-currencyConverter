@@ -1,22 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Calc</title>
+    <title>Document</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-    <section class="calculator">
-        <h1 class="calculator__title">Currency Converter $</h1>
-        <div class="calculator__area">
-            <label for="azn">AZN <span><img src="img/Flag_of_Azerbaijan.svg.webp" alt="azeri flag"></span></label>
-            <input id="azn" type="number">
-            <label for="usd">USD <span><img src="img/Flag_of_the_United_States_(51_stars).svg.png" alt="american flag"></span></label>
-            <input id="usd" type="number">
+    <section class="main-section">
+        <h1>Currency Converter</h1>
+        <div class="subtitle">
+            <img src="icons/Foreign_currency_exchange.svg" alt="currency exchange">
+        </div>
+
+        <div class="calc-container">
+            <div class="currency">
+                <select id="currency-one">
+                    <option value="USD" selected>USD</option>
+                </select>
+                <input type="number" id="amount-one" placeholder="0" value="1" />
+            </div>
+
+            <div class="swap-rate-container">
+                <button class="btn" id="swap">
+                    Swap ↕️
+                </button>
+                <div class="rate" id="rate">--</div>
+            </div>
+
+            <div class="currency">
+                <select id="currency-two">
+                    <option value="AZN" selected>AZN</option>
+                </select>
+                <input type="number" id="amount-two" placeholder="0"/>
+            </div>
         </div>
     </section>
-    <script src="js/script.js"></script>
+
+    <script src="js/main.js"></script>
 </body>
+
 </html>
