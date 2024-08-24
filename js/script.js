@@ -7,7 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
         currencyTwo = document.querySelector("#currency-two"),
         amountTwo = document.querySelector("#amount-two"),
         rateEl = document.querySelector("#rate"),
-        swap = document.querySelector("#swap");
+        swap = document.querySelector("#swap"),
+        currencyBlockParents = document.querySelectorAll('.currency');
 
   function createNewOption(parent, key) {
     const currencyOneOption = document.createElement('option');
@@ -41,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(res => res.json())
       .then(data => {
         const rate = data.conversion_rates[currencyTwoVal];
-
+        
         if (i == 1) {
           amountTwo.value = (amountOne.value * rate).toFixed(2);
           rateEl.innerText = `1 ${currencyOneVal} = ${rate.toFixed(4)} ${currencyTwoVal}`;
@@ -51,8 +52,14 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
-  currencyOne.addEventListener("change", () => calculate(currencyOne.value, currencyTwo.value, 1));
-  currencyTwo.addEventListener("change", () => calculate(currencyTwo.value, currencyOne.value, 2));
+  currencyOne.addEventListener("change", () => {
+    calculate(currencyOne.value, currencyTwo.value, 1);
+    addFlag(currencyOne, currencyBlockParents[0]);
+  });
+  currencyTwo.addEventListener("change", () => {
+    calculate(currencyOne.value, currencyTwo.value, 1);
+    addFlag(currencyTwo, currencyBlockParents[1]);
+  });
 
   amountOne.addEventListener("input", () => calculate(currencyOne.value, currencyTwo.value, 1));
   amountTwo.addEventListener("input", () => calculate(currencyTwo.value, currencyOne.value, 2));
@@ -68,8 +75,30 @@ document.addEventListener("DOMContentLoaded", () => {
     amountTwo.value = tempAmount;
 
     calculate(currencyOne.value, currencyTwo.value, 1);
+    addFlag(currencyOne, currencyBlockParents[0]);
+    addFlag(currencyTwo, currencyBlockParents[1]);
   });
 
   calculate(currencyOne.value, currencyTwo.value, 1);
 
+  function addFlag(currency, imgParent) {
+    const oldFlags = imgParent.querySelectorAll('img');
+    oldFlags.forEach((elem) => {
+        elem.remove();
+    });
+
+    const flag = document.createElement('img');
+    flag.setAttribute('alt', 'flag');
+
+    if (currency.value.slice(0, 1) === 'X') {
+      flag.src = `icons/flags/xx.svg`;
+    } else {
+      flag.src = `icons/flags/${currency.value.toLowerCase()}.svg`;
+    }
+
+    currency.after(flag);
+  }
+
+  addFlag(currencyOne, currencyBlockParents[0]);
+  addFlag(currencyTwo, currencyBlockParents[1]);
 });

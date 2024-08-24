@@ -62,6 +62,11 @@ h1 {
   background: transparent;
 }
 
+.currency img {
+  height: 30px;
+  margin-left: 10px;
+}
+
 .currency input {
   border: 0;
   background: transparent;
