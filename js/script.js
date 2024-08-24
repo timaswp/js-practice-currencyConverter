@@ -8,7 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
         amountTwo = document.querySelector("#amount-two"),
         rateEl = document.querySelector("#rate"),
         swap = document.querySelector("#swap"),
-        currencyBlockParents = document.querySelectorAll('.currency');
+        currencyBlockParents = document.querySelectorAll('.currency'),
+        calcContainer = document.querySelector('.calc-container');
 
   function createNewOption(parent, key) {
     const currencyOneOption = document.createElement('option');
@@ -32,7 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
             createNewOption(currencyTwo, key);
           }
         }
-      });
+      })
+      .catch(errorMessage);
   }
 
   addCurrencies();
@@ -49,7 +51,19 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           amountOne.value = (amountTwo.value * rate).toFixed(2);
         }
-      });
+      })
+      .catch(errorMessage);
+  }
+
+  function errorMessage() {
+    const errorText = document.createElement('div');
+    errorText.textContent = "Something went wrong...";
+    errorText.classList.add('error');
+    calcContainer.append(errorText);
+    setTimeout(() => {
+        errorText.remove();
+    }, 1500);
+    console.log('ощибка');
   }
 
   currencyOne.addEventListener("change", () => {

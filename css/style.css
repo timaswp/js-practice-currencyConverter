@@ -74,6 +74,10 @@ h1 {
   text-align: right;
 }
 
+.calc-container {
+  position: relative;
+}
+
 .swap-rate-container {
   display: flex;
   align-items: center;
@@ -90,6 +94,16 @@ select:focus,
 input:focus,
 button:focus {
   outline: 0;
+}
+
+.error {
+  text-align: center;
+  font-size: 16px;
+  color: red;
+  position: absolute;
+  bottom: 0;
+  right: 50%;
+  transform: translateX(50%);
 }
 
 @media (max-width: 600px) {
