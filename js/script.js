@@ -1,15 +1,14 @@
-"use strict";
-
 document.addEventListener("DOMContentLoaded", () => {
-
   const currencyOne = document.querySelector("#currency-one"),
-        amountOne = document.querySelector("#amount-one"),
         currencyTwo = document.querySelector("#currency-two"),
+        amountOne = document.querySelector("#amount-one"),
         amountTwo = document.querySelector("#amount-two"),
         rateEl = document.querySelector("#rate"),
         swap = document.querySelector("#swap"),
         currencyBlockParents = document.querySelectorAll('.currency'),
-        calcContainer = document.querySelector('.calc-container');
+        calcContainer = document.querySelector('.calc-container'),
+        defaultCurrencyOne = document.querySelector("#default-currency-one"),
+        defaultCurrencyTwo = document.querySelector("#default-currency-two");
 
   function createNewOption(parent, key) {
     const currencyOneOption = document.createElement('option');
@@ -24,15 +23,29 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(data => {
         const currencyOneOptions = data.conversion_rates;
         for (let key in currencyOneOptions) {
-
-          if (key != 'USD') {
-            createNewOption(currencyOne, key);
-          }
-
-          if (key != 'AZN') {
-            createNewOption(currencyTwo, key);
-          }
+          createNewOption(currencyOne, key);
+          createNewOption(currencyTwo, key);
+          createNewOption(defaultCurrencyOne, key);
+          createNewOption(defaultCurrencyTwo, key);
         }
+
+        const savedDefaultCurrencyOne = localStorage.getItem('defaultCurrencyOne');
+        const savedDefaultCurrencyTwo = localStorage.getItem('defaultCurrencyTwo');
+
+        if (savedDefaultCurrencyOne) {
+          defaultCurrencyOne.value = savedDefaultCurrencyOne;
+        }
+        if (savedDefaultCurrencyTwo) {
+          defaultCurrencyTwo.value = savedDefaultCurrencyTwo;
+        }
+
+        currencyOne.value = defaultCurrencyOne.value;
+        currencyTwo.value = defaultCurrencyTwo.value;
+
+        addFlag(currencyOne, currencyBlockParents[0]);
+        addFlag(currencyTwo, currencyBlockParents[1]);
+
+        calculate(currencyOne.value, currencyTwo.value, 1);
       })
       .catch(errorMessage);
   }
@@ -44,7 +57,6 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(res => res.json())
       .then(data => {
         const rate = data.conversion_rates[currencyTwoVal];
-        
         if (i == 1) {
           amountTwo.value = (amountOne.value * rate).toFixed(2);
           rateEl.innerText = `1 ${currencyOneVal} = ${rate.toFixed(4)} ${currencyTwoVal}`;
@@ -63,14 +75,28 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
         errorText.remove();
     }, 1500);
-    console.log('ощибка');
   }
 
   currencyOne.addEventListener("change", () => {
     calculate(currencyOne.value, currencyTwo.value, 1);
     addFlag(currencyOne, currencyBlockParents[0]);
   });
+
   currencyTwo.addEventListener("change", () => {
+    calculate(currencyOne.value, currencyTwo.value, 1);
+    addFlag(currencyTwo, currencyBlockParents[1]);
+  });
+
+  defaultCurrencyOne.addEventListener("change", () => {
+    currencyOne.value = defaultCurrencyOne.value;
+    localStorage.setItem('defaultCurrencyOne', defaultCurrencyOne.value);
+    calculate(currencyOne.value, currencyTwo.value, 1);
+    addFlag(currencyOne, currencyBlockParents[0]);
+  });
+
+  defaultCurrencyTwo.addEventListener("change", () => {
+    currencyTwo.value = defaultCurrencyTwo.value;
+    localStorage.setItem('defaultCurrencyTwo', defaultCurrencyTwo.value);
     calculate(currencyOne.value, currencyTwo.value, 1);
     addFlag(currencyTwo, currencyBlockParents[1]);
   });
@@ -92,8 +118,6 @@ document.addEventListener("DOMContentLoaded", () => {
     addFlag(currencyOne, currencyBlockParents[0]);
     addFlag(currencyTwo, currencyBlockParents[1]);
   });
-
-  calculate(currencyOne.value, currencyTwo.value, 1);
 
   function addFlag(currency, imgParent) {
     const oldFlags = imgParent.querySelectorAll('img');
