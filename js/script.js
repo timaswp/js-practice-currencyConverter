@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function addCurrencies() {
-    fetch(`https://v6.exchangerate-api.com/v6/5928de987f1e7064b0ce717e/latest/USDtest`)
+    fetch(`https://v6.exchangerate-api.com/v6/5928de987f1e7064b0ce717e/latest/USD`)
       .then(res => res.json())
       .then(data => {
         const currencyOneOptions = data.conversion_rates;
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
   addCurrencies();
 
   function calculate(currencyOneVal, currencyTwoVal, i) {
-    fetch(`https://v6.exchangerate-api.com/v6/5928de987f1e7064b0ce717e/latest/${currencyOneVal}test`)
+    fetch(`https://v6.exchangerate-api.com/v6/5928de987f1e7064b0ce717e/latest/${currencyOneVal}`)
       .then(res => res.json())
       .then(data => {
         const rate = data.conversion_rates[currencyTwoVal];
