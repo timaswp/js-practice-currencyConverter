@@ -8,7 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
         currencyBlockParents = document.querySelectorAll('.currency'),
         calcContainer = document.querySelector('.calc-container'),
         defaultCurrencyOne = document.querySelector("#default-currency-one"),
-        defaultCurrencyTwo = document.querySelector("#default-currency-two");
+        defaultCurrencyTwo = document.querySelector("#default-currency-two"),
+        themeColor = document.querySelector('#color');
 
   function createNewOption(parent, key) {
     const currencyOneOption = document.createElement('option');
@@ -18,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function addCurrencies() {
-    fetch(`https://v6.exchangerate-api.com/v6/5928de987f1e7064b0ce717e/latest/USD`)
+    fetch(`https://v6.exchangerate-api.com/v6/5928de987f1e7064b0ce717e/latest/USDtest`)
       .then(res => res.json())
       .then(data => {
         const currencyOneOptions = data.conversion_rates;
@@ -53,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
   addCurrencies();
 
   function calculate(currencyOneVal, currencyTwoVal, i) {
-    fetch(`https://v6.exchangerate-api.com/v6/5928de987f1e7064b0ce717e/latest/${currencyOneVal}`)
+    fetch(`https://v6.exchangerate-api.com/v6/5928de987f1e7064b0ce717e/latest/${currencyOneVal}test`)
       .then(res => res.json())
       .then(data => {
         const rate = data.conversion_rates[currencyTwoVal];
@@ -136,6 +137,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     currency.after(flag);
   }
+
+  function colorChange(color) {
+    document.querySelector(":root").style = `--primary-color: ${color};`;
+  }
+
+  themeColor.addEventListener("input", () => {
+    colorChange(themeColor.value);
+    localStorage.setItem('savedThemeColor', themeColor.value);
+  });
+
+  function loadTheme() {
+    const savedThemeColor = localStorage.getItem('savedThemeColor');
+
+    if (savedThemeColor) {
+      colorChange(savedThemeColor);
+      themeColor.setAttribute('value', savedThemeColor);
+    } else {
+      colorChange(themeColor.value);
+    }
+  }
+
+  loadTheme();
 
   addFlag(currencyOne, currencyBlockParents[0]);
   addFlag(currencyTwo, currencyBlockParents[1]);
